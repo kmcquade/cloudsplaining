@@ -43,7 +43,7 @@
                 </template>
 
                 <template v-slot:cell(policy_document)="row">
-                    <b-button size="sm" @click="info(row.item, row.index, $event.target, 'policy_document')"
+                    <b-button size="sm" @click="info(row.item, row.index, $event.target, 'policy_document', row.item.policy_name)"
                               class="mr-1">
                         See Policy Document
                     </b-button>
@@ -181,10 +181,12 @@
             }
         },
         methods: {
-            info(item, index, button, column_name) {
-                this.infoModal.title = `Column: ${column_name}`
+            info(item, index, button, column_name, policy_name) {
+                this.infoModal.title = `Policy: ${policy_name}`
+                // this.infoModal.title = `Column: ${column_name}`
                 this.infoModal.content = JSON.stringify(item[column_name], null, 2)
                 this.$root.$emit('bv::show::modal', this.infoModal.id, button)
+                console.log(`Getting info for: ${this.infoModal.id}`)
             },
             managedPolicyFindings: function (policyId, riskType) {
                 return managedPoliciesUtil.getManagedPolicyFindings(this.iam_data, this.managedBy, policyId, riskType);
