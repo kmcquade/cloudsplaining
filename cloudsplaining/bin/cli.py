@@ -22,6 +22,7 @@ def cloudsplaining():
 
 cloudsplaining.add_command(command.create_exclusions_file.create_exclusions_file)
 cloudsplaining.add_command(command.expand_policy.expand_policy)
+cloudsplaining.add_command(command.filter_findings.filter_findings)
 cloudsplaining.add_command(command.scan.scan)
 cloudsplaining.add_command(command.scan_policy_file.scan_policy_file)
 cloudsplaining.add_command(command.download.download)
