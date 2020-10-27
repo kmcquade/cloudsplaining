@@ -1,0 +1,144 @@
+# Before running, set the environment variables:
+# export BUCKET_NAME="nameofyourcloudsplainingresultsbucket"
+# export TARGET_ROLE_NAME="cloudsplaining-target"
+# export LAMBDA_ROLE="cloudsplaining"
+# export TRUSTED_ROLE_NAME="SecurityAssessmentRole"
+
+service: cloudsplaining
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: python3.8
+
+custom:
+  pythonRequirements:
+    dockerizePip: true
+    zip: true
+    layer:
+      name: cloudsplaining
+      description: Cloudsplaining layers
+      compatibleRuntimes:
+        - python3.6
+        - python3.7
+        - python3.8
+#  stage: stage
+#  region: us-east-1
+
+functions:
+  cloudsplainingScan:
+    handler: handler
+    module: lambdas.scan_account
+    environment:
+      SAVE_BUCKET: ${env:BUCKET_NAME}
+      TARGET_ROLE_NAME: ${env:TARGET_ROLE_NAME}
+      TRUSTED_ROLE_NAME: ${env:TRUSTED_ROLE_NAME}
+    layers:
+      - {Ref: PythonRequirementsLambdaLayer}
+
+resources: # CloudFormation template syntax
+  Resources:
+    cloudsplainingResultsBucket:
+      Type: S3::Bucket
+      Properties:
+        BucketName: ${env:BUCKET_NAME}
+        AccessControl: ${env:BUCKET_NAME}
+        BucketEncryption:
+          ServerSideEncryptionConfiguration:
+            SSEAlgorithm: AES256
+            # KMSMasterKeyID: String
+
+    # SNS Topic: Send messages to this topic to kick off a new Cloudsplaining scan
+    MyTopic:
+        Type: AWS::SNS::Topic
+        Properties:
+        DisplayName: 'cloudsplaining-scan'
+        TopicName: cloudsplaining-scan
+
+    # Trusted role - the role that other accounts allow to assume into theirs
+    TrustedRole:
+      LambdaRole:
+        Type: AWS::IAM::Role
+        Properties:
+          Path: /
+          RoleName: ${env:TRUSTED_ROLE_NAME}
+          AssumeRolePolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Principal:
+                  Service:
+                    - lambda.amazonaws.com
+                Action: sts:AssumeRole
+    # IAM Role for the Cloudsplaining Lambda function
+    LambdaRole:
+      Type: AWS::IAM::Role
+      Properties:
+        Path: /
+        RoleName: ${env:LAMBDA_ROLE}
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action: sts:AssumeRole
+        Policies:
+          - PolicyName: cloudsplainingLambdaPolicy
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                # Assume the SecurityAssessmentRole
+                - Effect: Allow
+                  Action:
+                    - sts:AssumeRole
+                  # https://www.serverless.com/plugins/serverless-pseudo-parameters#usage
+                  Resource:
+                    Fn::Join:
+                      - arn:${Partition}:iam::${Account}:role/${RoleNameWithPath}
+                      - ""
+                      - "arn:aws:iam::"
+                      - "*"  # This allows us to assume any role with this name
+                      - ":"
+                        - "Ref": "TrustedRole"
+                        - "/*"
+                # Query IAM
+                - Effect: Allow
+                  Action:
+                    - iam:GetAccountAuthorizationDetails
+                  Resource:
+                    - "*"
+                # Store results in S3 bucket
+                - Effect: "Allow"
+                  Action:
+                    - "s3:ListBucket"
+                  Resource: { "Fn::Join": ["", ["arn:aws:s3:::", { "Ref": "cloudsplainingResultsBucket" } ] ]  }
+                - Effect: "Allow"
+                  Action:
+                    - "s3:PutObject"
+                    - "s3:GetObject"
+                  Resource:
+                    Fn::Join:
+                      - ""
+                      - - "arn:aws:s3:::"
+                        - "Ref": "cloudsplainingResultsBucket"
+                        - "/*"
+                # Push to CloudWatch log groups
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogGroup
+                    - logs:CreateLogStream
+                    - logs:PutLogEvents
+                  Resource:
+                    - 'Fn::Join':
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
+
+plugins:
+  - serverless-pseudo-parameters
+  - serverless-python-requirements

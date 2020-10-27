@@ -1,0 +1,3 @@
+boto3
+botocore
+cloudsplaining==0.2.3
