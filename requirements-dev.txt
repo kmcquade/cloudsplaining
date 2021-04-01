@@ -14,7 +14,7 @@ coverage==5.5
 docutils==0.16
 dparse==0.5.1
 future==0.18.2
-gitdb==4.0.5
+gitdb==4.0.7
 GitPython==3.1.11
 idna==2.10
 importlib-metadata==3.3.0
