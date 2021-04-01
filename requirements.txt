@@ -1,6 +1,6 @@
 beautifulsoup4==4.9.3
 boto3==1.17.42
-botocore==1.19.43
+botocore==1.20.42
 cached-property==1.5.2
 certifi==2020.12.5
 chardet==4.0.0
