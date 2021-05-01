@@ -17,7 +17,7 @@ dparse==0.5.1
 future==0.18.2
 GitPython==3.1.15
 idna==3.1
-importlib-metadata==3.7.3
+importlib-metadata==4.0.1
 invoke==1.5.0
 isort==5.8.0
 Jinja2==2.11.3
