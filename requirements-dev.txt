@@ -12,7 +12,7 @@ chardet==4.0.0
 click==7.1.2
 contextlib2==0.6.0.post1
 coverage==5.5
-docutils==0.16
+docutils==0.17.1
 dparse==0.5.1
 future==0.18.2
 GitPython==3.1.14
