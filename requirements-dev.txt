@@ -7,7 +7,7 @@ coverage==5.5
 # Security testing
 bandit==1.7.0
 # Formatter
-black==20.8b1
+black==21.5b2
 # Other?
 appdirs==1.4.4
 astroid==2.5.6
