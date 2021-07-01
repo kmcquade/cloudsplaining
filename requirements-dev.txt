@@ -50,7 +50,7 @@ stevedore==3.3.0
 toml==0.10.2
 tornado==6.1
 tqdm==4.61.1
-typed-ast==1.4.2
+typed-ast==1.4.3
 urllib3==1.26.5
 wcwidth==0.2.5
 wrapt==1.12.1
