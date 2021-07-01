@@ -1,5 +1,5 @@
 # Linter
-pylint==2.8.2
+pylint==2.9.2
 # Unit testing - nose and pytest
 nose==1.3.7
 pytest==6.2.3
