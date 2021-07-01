@@ -9,7 +9,7 @@ bandit==1.7.0
 # Formatter
 black==21.6b0
 # type check
-mypy==0.812
+mypy==0.910
 # Other?
 appdirs==1.4.4
 astroid==2.5.6
