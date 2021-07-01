@@ -20,7 +20,7 @@ contextlib2==21.6.0
 docutils==0.17.1
 dparse==0.5.1
 future==0.18.2
-GitPython==3.1.14
+GitPython==3.1.18
 idna==2.10
 importlib-metadata==3.7.3
 invoke==1.5.0
