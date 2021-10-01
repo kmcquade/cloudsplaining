@@ -36,7 +36,7 @@ more-itertools==8.10.0
 nltk==3.6.4
 packaging==21.0
 pathspec==0.9.0
-pbr==5.5.1
+pbr==5.6.0
 pluggy==0.13.1
 py==1.10.0
 pyparsing==2.4.7
