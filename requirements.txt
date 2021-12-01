@@ -10,7 +10,7 @@ click_option_group==0.5.3
 jinja2==3.0.3
 pyyaml==6.0
 # We render Markdown glossary files as HTML in the Cloudsplaining report
-markdown==3.3.4
+markdown==3.3.6
 # AWS IAM Logic
 policy-sentry==0.11.18
 # Schema validation
