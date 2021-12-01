@@ -44,7 +44,7 @@ python-dateutil==2.8.2
 regex==2021.11.10
 requests==2.26.0
 safety==1.10.3
-six==1.15.0
+six==1.16.0
 soupsieve==2.2.1
 stevedore==3.3.0
 toml==0.10.2
