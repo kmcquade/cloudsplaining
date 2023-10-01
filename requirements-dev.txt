@@ -7,6 +7,6 @@ coverage==7.3.1
 # Security testing
 bandit==1.7.5
 # Formatter
-black==20.8b1
+black==23.9.1
 # type check
 mypy==0.812
