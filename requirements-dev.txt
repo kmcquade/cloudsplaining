@@ -9,4 +9,4 @@ bandit==1.7.9
 # Formatter
 black==24.4.2
 # type check
-mypy==0.812
+mypy==1.10.1
